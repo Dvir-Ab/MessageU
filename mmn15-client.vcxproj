@@ -151,11 +151,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="client.cpp" />
+    <ClCompile Include="ConnectionHandler.cpp" />
+    <ClCompile Include="Cypher.cpp" />
+    <ClCompile Include="Friends.cpp" />
     <ClCompile Include="mmn15-client.cpp" />
+    <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="client.h" />
+    <ClInclude Include="Cypher.h" />
+    <ClInclude Include="Friends.h" />
     <ClInclude Include="Header.h" />
+    <ClInclude Include="user.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

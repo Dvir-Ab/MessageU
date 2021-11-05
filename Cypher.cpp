@@ -2,6 +2,7 @@
 
 static MyCipher& getCipher(std::string filename)
 {
+	static MyCipher _cipher;
 	_cipher.init(filename);
 	return _cipher;
 }
@@ -74,51 +75,51 @@ std::string MyCipher::encrypt_with_sym(CryptoPP::byte* symmericKey, const std::s
 	return cipherData;
 }
 
-std::string MyCipher::prepare(const std::string& fileName, const std::string& data) {
-	//create an aes key
-	CryptoPP::byte key[CryptoPP::AES::DEFAULT_KEYLENGTH];
-	CryptoPP::byte iv[CryptoPP::AES::BLOCKSIZE] = { 0 };
-	CryptoPP::AutoSeededRandomPool asrp;
-	asrp.GenerateBlock(key, sizeof(key));
-	//asrp.GenerateBlock(iv, sizeof(iv));
-	std::string cipher, to_prepare_c(data);
-	try {
-		// cbc encryptor
-		CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption enc;
-		enc.SetKeyWithIV(key, sizeof(key), iv);
-
-		// remove padding
-		CryptoPP::StringSource s(to_prepare_c, true,
-			new CryptoPP::StreamTransformationFilter(enc,
-				new CryptoPP::StringSink(cipher)
-			)
-		);
-
-		CryptoPP::StreamTransformationFilter filter(enc);
-		filter.Put((const CryptoPP::byte*)to_prepare_c.data(), to_prepare_c.size());
-		filter.MessageEnd();
-
-		//CryptoPP::AutoSeededRandomPool asrp;
-		//		CryptoPP::InvertibleRSAFunction priv_key;
-		CryptoPP::ByteQueue bq;
-		this->Load(fileName, bq);
-		//	priv_key.Load(bq);//FileSource(this->PR_NAME,true,new CryptoPP::Base64Decoder()));
-
-		CryptoPP::RSAFunction pub_key;
-		bq.Clear();
-		std::string in_buff;
-		CryptoPP::FileSource file("me.info", true);
-		std::istream* in = file.GetStream();
-		std::getline(*in, in_buff, '\n');
-		in_buff.clear();
-		std::getline(*in, in_buff, '\n');
-		pub_key.Load(bq);
-	}
-	catch (const CryptoPP::Exception& e)
-	{
-		std::cerr << e.what() << std::endl;
-	}
-};
+//std::string MyCipher::prepare(const std::string& fileName, const std::string& data) {
+//	//create an aes key
+//	CryptoPP::byte key[CryptoPP::AES::DEFAULT_KEYLENGTH];
+//	CryptoPP::byte iv[CryptoPP::AES::BLOCKSIZE] = { 0 };
+//	CryptoPP::AutoSeededRandomPool asrp;
+//	asrp.GenerateBlock(key, sizeof(key));
+//	//asrp.GenerateBlock(iv, sizeof(iv));
+//	std::string cipher, to_prepare_c(data);
+//	try {
+//		// cbc encryptor
+//		CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption enc;
+//		enc.SetKeyWithIV(key, sizeof(key), iv);
+//
+//		// remove padding
+//		CryptoPP::StringSource s(to_prepare_c, true,
+//			new CryptoPP::StreamTransformationFilter(enc,
+//				new CryptoPP::StringSink(cipher)
+//			)
+//		);
+//
+//		CryptoPP::StreamTransformationFilter filter(enc);
+//		filter.Put((const CryptoPP::byte*)to_prepare_c.data(), to_prepare_c.size());
+//		filter.MessageEnd();
+//
+//		//CryptoPP::AutoSeededRandomPool asrp;
+//		//		CryptoPP::InvertibleRSAFunction priv_key;
+//		CryptoPP::ByteQueue bq;
+//		this->Load(fileName, bq);
+//		//	priv_key.Load(bq);//FileSource(this->PR_NAME,true,new CryptoPP::Base64Decoder()));
+//
+//		CryptoPP::RSAFunction pub_key;
+//		bq.Clear();
+//		std::string in_buff;
+//		CryptoPP::FileSource file("me.info", true);
+//		std::istream* in = file.GetStream();
+//		std::getline(*in, in_buff, '\n');
+//		in_buff.clear(); // throw this line
+//		std::getline(*in, in_buff, '\n');
+//		pub_key.Load(bq);
+//	}
+//	catch (const CryptoPP::Exception& e)
+//	{
+//		std::cerr << e.what() << std::endl;
+//	}
+//};
 
 CryptoPP::byte* MyCipher::new_sym_key() {
 	CryptoPP::byte key[CryptoPP::AES::DEFAULT_KEYLENGTH];
