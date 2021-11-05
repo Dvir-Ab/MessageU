@@ -1,10 +1,10 @@
 #include <cryptlib.h>
-#include <cstdlib>
+//#include <cstdlib>
 #include <utility>
 #include <boost/filesystem.hpp>
 #include <boost/asio.hpp>
 #include <boost/endian.hpp>
-#include <osrng.h>
+//#include <osrng.h>
 #include <files.h>
 #include <thread>
 #include "utils.h"
