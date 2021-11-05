@@ -21,7 +21,8 @@ void ResponseHandler::response() {
 			// log this
 			return;
 		}
-		hdr = { (CryptoPP::byte)data[0], chrArr_to_ushort(data.substr(1,2).c_str()),net_uchr_to_uint_host(data.substr(3,4).c_str()) };
+		// fill hdr
+		hdr = { (CryptoPP::byte)data[0], chrArr_to_ushort(data.substr(1, 2).c_str()), net_uchr_to_uint_host(data.substr(3, 4).c_str()) };
 		data = data.substr(ind, data.size() - ind);
 		if (hdr.code == GNRL_ERR) { //general server error
 			std::cout << "General server error." << std::endl;
@@ -122,31 +123,31 @@ void ResponseHandler::response() {
 	catch (std::exception& e) {}
 }
 
-void Client::interact() {
-	boost::asio::io_context io_context;
-	RequestHandler rh(io_context, &this->_fm, this->_host, this->_port);// , this->endP);
-
-	std::cout << "MessageU client at your service." << std::endl;
-	std::cout << "\n 1) Register\n 2) Request for client list\n 3) Request for public key\n"
-		<< " 4) Request for waiting messages\n 5) Send a text message\n 50) Send a file"
-		<< "\n 51) Send a request for symmetric key\n 52) Send your symmetric key\n 0) Exit\n"
-		<< "Please enter the options." << std::endl;
-	std::string input;
-	std::getline(std::cin, input);
-	try {
-		rh.handle(std::stoi(input));
-	}
-	catch (...) {
-		std::cerr << "Error: wrong input!";
-	}
-}
+//void Client::interact() {
+//	boost::asio::io_context io_context;
+//	RequestHandler rh(io_context, &this->_fm, this->_host, this->_port);// , this->endP);
+//
+//	std::cout << "MessageU client at your service." << std::endl;
+//	std::cout << "\n 1) Register\n 2) Request for client list\n 3) Request for public key\n"
+//		<< " 4) Request for waiting messages\n 5) Send a text message\n 50) Send a file"
+//		<< "\n 51) Send a request for symmetric key\n 52) Send your symmetric key\n 0) Exit\n"
+//		<< "Please enter the options." << std::endl;
+//	std::string input;
+//	std::getline(std::cin, input);
+//	try {
+//		rh.handle(std::stoi(input));
+//	}
+//	catch (...) {
+//		std::cerr << "Error: wrong input!";
+//	}
+//}
 
 
 
 int main(int argc, char* argv[]) {
 	try {
 		//boost::asio::io_context io_context;
-		Client c;
+		CLIENT::Client c;
 		c.start();
 	}
 	catch (std::exception& e) {

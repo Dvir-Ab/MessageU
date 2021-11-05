@@ -1,4 +1,3 @@
-#pragma once
 #include "utils.h"
 
 class Friend {
@@ -56,7 +55,7 @@ public:
 	void setSelf(const Friend& f);
 	Friend* getFriend(std::string name);
 	void setFriend(std::string name, const Friend f);
-	bool exist(std::string user = "");
+	bool exist(std::string user);
 private:
 	Friend _myself;
 	std::mutex _slf_mtx, _otr_mtx;
