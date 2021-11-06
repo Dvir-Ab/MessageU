@@ -12,13 +12,14 @@ class DbQuery:
         self.__create()
 
     def _connect(self) -> bool:
-        if not self._conn:
-            try:
-                self._conn = sqlite3.connect('server.db')
-                self._conn.text_factory = str
-            except Exception as e:
-                exceptions.log_error("failed to connect the db.", e)
-                return False
+        if self._conn:
+            self._conn.close()
+        try:
+            self._conn = sqlite3.connect('server.db')
+            self._conn.text_factory = str
+        except Exception as e:
+            exceptions.log_error("failed to connect the db.", e)
+            return False
         return True
     
     def __create(self) -> None:
@@ -58,7 +59,7 @@ class ClientTbl(DbQuery):
     def insert(self, usr_id, uname, pubkey):
         if self._connect():
             try:
-                exceptions.log_info("inserting the user, " + uname + ", to the db")
+                exceptions.log_info("inserting the user, to the db")
                 cur = self._conn.cursor()
                 cur.execute("INSERT INTO ClientTbl(ID,PublicKey,UName,LastSeen) VALUES(?,?,?,?)",
                             [usr_id, pubkey, uname, datetime.now()])
@@ -94,6 +95,7 @@ class ClientTbl(DbQuery):
         return False
 
     def get_usr(self, user_id):
+        self.update(user_id)
         if self._connect():
             try:
                 cur = self._conn.cursor()
@@ -109,6 +111,7 @@ class ClientTbl(DbQuery):
         return ""
 
     def get_usrs(self, uid):
+        self.update(uid)
         if self._connect():
             try:
                 exceptions.log_info("loading the users list.")
@@ -136,6 +139,7 @@ class MsgTbl(DbQuery):
         return res
 
     def pull(self, usr_id):
+        ClientTbl().update(usr_id)
         exceptions.log_info("pulling messages from the db")
         if self._connect():
             try:
@@ -157,6 +161,7 @@ class MsgTbl(DbQuery):
         return ""
 
     def insert(self, from_usr, to_usr, msg_type, msg_cntnt) -> int:
+        ClientTbl().update(from_usr)
         exceptions.log_info("inserting message to the db")
         if self._connect():
             try:
