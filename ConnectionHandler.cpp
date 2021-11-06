@@ -154,7 +154,7 @@ void RequestHandler::registertion() {
 	if (input.empty() || input.size() > MAX_NAME_LEN) {
 		throw std::exception("name length error.");
 	}
-	// TODO: add try catch block !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// TODO: add try catch block !!!!!!!!!!!!!!!!!!!!!!!!!!!
 	Friend me(input);
 	// write the user name in me.info
 	/*input.append("\0");
