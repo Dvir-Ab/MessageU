@@ -153,7 +153,7 @@ class ConnectionHandler:
         if not self._target_address:
             raise Exception("error: client address lost, can't send messages.")
         if code not in self.__response_tbl.values():
-            raise exceptions.InvalidCodeException("Error: the code, ", code, ", is not valid.")
+            raise exceptions.InvalidCodeException(f"Error: the code, {code}, is not valid.")
         to_send = struct.pack('<B H', self.__VER__, code)  # pack the version and the respond code
         if code == self.__response_tbl['gnrl_err']:
             to_send += struct.pack('<I', 0)
@@ -182,7 +182,11 @@ class ConnectionHandler:
         padding_size = self.__max_pack__ - len(to_send)
         if padding_size > 0:
             to_send += struct.pack(str(padding_size) + 'x')
-        sock = connect(self._target_address)
+        sock: socket
+        try:
+            sock = connect(self._target_address)
+        except Exception as e:
+            exceptions.log_info(f"failed to connect to {self._target_address}", e)
         exceptions.log_info("sending " + str(len(to_send)) + " bytes.")
         if sock.sendall(to_send) == 0:
             raise exceptions.BrokenConnectionException("socket connection broken.")

@@ -128,15 +128,16 @@ class ClientTbl(DbQuery):
         return []
 
 
+def __content_converter(content: bytes):
+    res = ''
+    for byte in content:
+        res += chr(byte)
+    return res
+
+
 class MsgTbl(DbQuery):
     def __init__(self):
         super().__init__()
-
-    def __content_converter(self, content: bytes):
-        res = ''
-        for byte in content:
-            res += chr(byte)
-        return res
 
     def pull(self, usr_id):
         ClientTbl().update(usr_id)
